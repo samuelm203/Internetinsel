@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Passwort-Spiel – Runde 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .background {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      z-index: -1;
+    }
+
+    .content {
+      text-align: center;
+      max-width: 700px;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #00796b;
+    }
+
+    .passwort-option {
+      font-size: 1.2rem;
+      margin: 10px 0;
+      background-color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .passwort-option:hover {
+      transform: scale(1.05);
+      background-color: #e0f2f1;
+    }
+
+    .feedback {
+      font-size: 1.3rem;
+      margin-top: 20px;
+      font-weight: 600;
+    }
+
+    .correct {
+      color: #2e7d32;
+    }
+
+    .wrong {
+      color: #c62828;
+    }
+
+    .emoji {
+      font-size: 3rem;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="background"></div>
+<main class="content">
+  <h1 id="typedTitle"></h1>
+  <div class="passwort-option" onclick="checkAnswer(false)">hallo2008</div>
+  <div class="passwort-option" onclick="checkAnswer(true)">Jx!93#az</div>
+  <div class="passwort-option" onclick="checkAnswer(false)">Katze123</div>
+  <div id="feedback" class="feedback"></div>
+  <div class="emoji">🔐</div>
+</main>
+
+<script>
+  function startTypingEffect(text, elementId, speed = 60, callback = null) {
+    const element = document.getElementById(elementId);
+    let index = 0;
+    function type() {
+      if (index < text.length) {
+        element.textContent += text.charAt(index);
+        index++;
+        setTimeout(type, speed);
+      } else if (callback) {
+        callback();
+      }
+    }
+    type();
+  }
+
+  function checkAnswer(isCorrect) {
+    const feedback = document.getElementById("feedback");
+    if (isCorrect) {
+      feedback.textContent = "✅ Richtig!";
+      feedback.className = "feedback correct";
+      setTimeout(() => {
+        location.href = "passwort2.html";
+      }, 2000);
+    } else {
+      feedback.textContent = "❌ Falsch!";
+      feedback.className = "feedback wrong";
+      setTimeout(() => {
+        location.href = "aufloesungpasswortspiel1.html";
+      }, 2000);
+    }
+  }
+
+  startTypingEffect("Welches Passwort ist am sichersten? - Runde 2", "typedTitle");
+</script>
+</body>
+</html>

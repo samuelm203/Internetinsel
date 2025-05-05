@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ist das Bild echt?</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: white;
+      overflow: hidden;
+      touch-action: pan-x;
+    }
+
+    h1#typedTitle {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2c2c2c;
+      margin-top: 3rem;
+      margin-bottom: 2.5rem;
+    }
+
+    #list-stack {
+      position: relative;
+      width: 320px;
+      max-width: 80%;
+    }
+
+    #list-stack li {
+      transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+      touch-action: pan-x;
+    }
+
+    #feedback {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      display: none;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+<h1 id="typedTitle"></h1>
+
+<!-- Feedback -->
+<div id="feedback"></div>
+
+<!-- Swipe-Bereich -->
+<div class="h-screen flex m-0 justify-center items-start mt-10 overflow-hidden">
+  <ul id="list-stack" class="h-2/3 min-h-96 *:bg-white *:h-3/4 *:rounded-xl *:overflow-hidden *:shadow-2xl *:absolute"></ul>
+
+  <!-- Dislike Icon -->
+  <svg class="absolute left-64 fill-gray-500 -translate-x-1/2 opacity-25 top-80" viewBox="0 0 512 512" width="64">
+    <path d="M473.7 73.8l-2.4-2.5c-46-47-118-51.7-169.6-14.8L336 159.9l-96 64 48 128-144-144 96-64-28.6-86.5C159.7 19.6 87 24 40.7 71.4l-2.4 2.4C-10.4 123.6-12.5 202.9 31 256l212.1 218.6c7.1 7.3 18.6 7.3 25.7 0L481 255.9c43.5-53 41.4-132.3-7.3-182.1z" />
+  </svg>
+
+  <!-- Like Icon -->
+  <svg class="absolute right-64 fill-gray-500 -translate-x-1/2 opacity-25 top-80" viewBox="0 0 512 512" width="64">
+    <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z" />
+  </svg>
+</div>
+
+<script>
+  // Tippeffekt für den Titel
+  const titleText = "Ist das Bild echt?";
+  const titleElement = document.getElementById("typedTitle");
+  let titleIndex = 0;
+  function typeTitle() {
+    if (titleIndex < titleText.length) {
+      titleElement.textContent += titleText.charAt(titleIndex);
+      titleIndex++;
+      setTimeout(typeTitle, 80);
+    }
+  }
+  typeTitle();
+
+  const stack = document.getElementById('list-stack');
+  const feedback = document.getElementById('feedback');
+
+  const imageData = [
+    { url: "https://i0.wp.com/alexloth.com/wp-content/uploads/2023/11/Deepfake-Pope.jpg?resize=819%2C1024&ssl=1", isReal: false },
+    { url: "https://www.projuventute.ch/sites/default/files/styles/hero_large/public/2023-10/schulstress.png?h=a92f03cd&itok=8f52Gxdm", isReal: true },
+    { url: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Hauskatze_langhaar.jpg/1200px-Hauskatze_langhaar.jpg", isReal: true },
+    { url: "https://preview.redd.it/how-to-create-realistic-ai-instagram-models-v0-x20d5mx5hnzc1.png?width=640&crop=smart&auto=webp&s=cd338531690a01e4bfe997525bde23c05cd598eb", isReal: false },
+    { url: "https://www.piclumen.com/wp-content/uploads/2024/10/realistic-ai-image-generator-model-boy.webp", isReal: false }
+  ];
+
+  let swipedCardsCount = 0;
+  let incorrectAnswers = 0;
+
+  imageData.forEach((data, i) => {
+    const card = document.createElement('li');
+    card.dataset.isReal = data.isReal;
+    card.innerHTML = `
+      <div class="aspect-square w-full p-4 overflow-hidden">
+        <img class="rounded-md aspect-square w-full object-cover" src="${data.url}" alt="card image ${i + 1}" />
+      </div>
+      <h1 class="text-center text-lg font-semibold text-gray-700 mt-2">Bild ${i + 1}</h1>
+    `;
+    setupCard(card);
+    stack.appendChild(card);
+  });
+
+  function showFeedback(text, isCorrect) {
+    feedback.textContent = text;
+    feedback.style.backgroundColor = isCorrect ? "green" : "crimson";
+    feedback.style.display = "block";
+    setTimeout(() => {
+      feedback.style.display = "none";
+    }, 1000);
+  }
+
+  function setupCard(card) {
+    let offsetX = 0;
+    let offsetY = 0;
+    let isDragging = false;
+
+    const handlePointerDown = (e) => {
+      isDragging = true;
+      offsetX = e.clientX || e.touches[0].clientX;
+      offsetY = e.clientY || e.touches[0].clientY;
+      card.style.transition = 'none';
+    };
+
+    const handlePointerMove = (e) => {
+      if (!isDragging) return;
+      const currentX = e.clientX || e.touches[0].clientX;
+      const currentY = e.clientY || e.touches[0].clientY;
+      const dx = currentX - offsetX;
+      const dy = currentY - offsetY;
+      card.style.transform = `translate(${dx}px, ${dy}px) rotate(${dx * 0.05}deg)`;
+    };
+
+    const handlePointerUp = (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      const dx = (e.clientX || e.changedTouches[0].clientX) - offsetX;
+      const direction = Math.sign(dx);
+
+      if (Math.abs(dx) > 100) {
+        const isReal = card.dataset.isReal === "true";
+        const userSaysReal = direction > 0; // Rechts = echt, Links = fake
+
+        if (isReal === userSaysReal) {
+          showFeedback("Richtig!", true);
+        } else {
+          showFeedback("Falsch!", false);
+          incorrectAnswers++;
+        }
+
+        card.style.transition = 'transform 0.5s ease-out';
+        card.style.transform = `translate(${direction * 1000}px, 0px) rotate(${direction * 45}deg)`;
+
+        setTimeout(() => {
+          card.remove();
+          swipedCardsCount++;
+          if (swipedCardsCount === imageData.length) {
+            if (incorrectAnswers > 0) {
+              setTimeout(() => {
+                window.location.href = 'aufloesungechtoderfake2.html';
+              }, 600);
+            } else {
+              setTimeout(() => {
+                window.location.href = 'erklaerungennews.html';
+              }, 600);
+            }
+          }
+        }, 300);
+      } else {
+        card.style.transition = 'transform 0.3s ease-out';
+        card.style.transform = 'translate(0, 0)';
+      }
+    };
+
+    card.addEventListener('mousedown', handlePointerDown);
+    card.addEventListener('mousemove', handlePointerMove);
+    card.addEventListener('mouseup', handlePointerUp);
+    card.addEventListener('touchstart', handlePointerDown);
+    card.addEventListener('touchmove', handlePointerMove);
+    card.addEventListener('touchend', handlePointerUp);
+  }
+</script>
+</body>
+</html>

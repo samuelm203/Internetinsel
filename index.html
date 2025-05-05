@@ -1,0 +1,140 @@
+    <!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Spiel Startseite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basis-Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            overflow: hidden;
+        }
+
+        /* Hintergrund mit sanftem Farbverlauf */
+        .background {
+            background: linear-gradient(135deg, #e0e0e0, #ffffff);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Zentrierter Seiteninhalt */
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            color: #2c2c2c;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Gruppe für Titel + Untertitel */
+        .text-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 30px; /* vorher: 60px */
+        }
+
+        /* Titel */
+        #typedTitle {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c2c2c;
+        }
+
+        /* Untertitel */
+        #typedSubtitle {
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        /* Button */
+        #startBtn {
+            padding: 14px 28px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 10px;
+            background-color: #7E007B;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+        }
+
+        #startBtn:hover {
+            background-color: rgba(86, 0, 255, 0.71);
+            transform: scale(1.03);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+<div class="background"></div>
+
+<main class="content">
+    <div class="text-block">
+        <h1 id="typedTitle"></h1>
+        <p id="typedSubtitle"></p>
+    </div>
+    <button id="startBtn">Los geht's</button>
+</main>
+
+<script>
+    const titleText = "Hey, willkommen in der digitalen Welt!";
+    const subtitleText = "Heute entdeckst du, wie soziale Medien funktionieren – und was du dabei beachten solltest.";
+    const titleElement = document.getElementById("typedTitle");
+    const subtitleElement = document.getElementById("typedSubtitle");
+
+    let titleIndex = 0;
+    let subtitleIndex = 0;
+
+    function typeTitle() {
+        if (titleIndex < titleText.length) {
+            titleElement.textContent += titleText.charAt(titleIndex);
+            titleIndex++;
+            setTimeout(typeTitle, 70);
+        } else {
+            setTimeout(typeSubtitle, 500); // kurze Pause
+        }
+    }
+
+    function typeSubtitle() {
+        if (subtitleIndex < subtitleText.length) {
+            subtitleElement.textContent += subtitleText.charAt(subtitleIndex);
+            subtitleIndex++;
+            setTimeout(typeSubtitle, 40);
+        }
+    }
+
+    typeTitle();
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+        window.location.href = "begruessung.html";
+    });
+</script>
+</body>
+</html>

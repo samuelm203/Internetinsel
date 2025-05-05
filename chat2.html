@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat Entscheidung</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #ffffff);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      overflow: hidden;
+    }
+
+    @keyframes gradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .text-block {
+      margin-bottom: 30px;
+    }
+
+    #typedTitle {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #2c2c2c;
+    }
+
+    #typedSubtitle {
+      font-size: 1.1rem;
+      margin-top: 10px;
+      color: #555;
+    }
+
+    .chat-box {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      width: 320px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    }
+
+    .message {
+      background-color: #e0f2f1;
+      padding: 12px 16px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .feedback {
+      font-size: 14px;
+      color: #333;
+      margin-top: 10px;
+      font-style: italic;
+      min-height: 20px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .buttons button {
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 48%;
+    }
+
+    .btn-block {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .btn-block:hover {
+      background-color: #d32f2f;
+    }
+
+    .btn-continue {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .btn-continue:hover {
+      background-color: #388e3c;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="text-block">
+    <h1 id="typedTitle"></h1>
+    <p id="typedSubtitle"></p>
+  </div>
+
+  <div class="chat-box">
+    <div class="message">Hey, weißt du noch, was wir in Bio aufbekommen haben? Ich hab's nicht mehr ganz im Kopf 🙈</div>
+    <div class="feedback" id="feedbackText"></div>
+    <div class="buttons">
+      <button class="btn-block" disabled>Blockieren</button>
+      <button class="btn-continue" disabled>Weiter chatten</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const titleText = "Alles in Ordnung!";
+  const subtitleText = "Diese Nachricht klingt harmlos. Wie möchtest du reagieren?";
+  const titleElement = document.getElementById("typedTitle");
+  const subtitleElement = document.getElementById("typedSubtitle");
+  const feedbackElement = document.getElementById("feedbackText");
+  const blockButton = document.querySelector('.btn-block');
+  const continueButton = document.querySelector('.btn-continue');
+
+  let titleIndex = 0;
+  let subtitleIndex = 0;
+
+  function typeTitle() {
+    if (titleIndex < titleText.length) {
+      titleElement.textContent += titleText.charAt(titleIndex);
+      titleIndex++;
+      setTimeout(typeTitle, 70);
+    } else {
+      setTimeout(typeSubtitle, 400);
+    }
+  }
+
+  function typeSubtitle() {
+    if (subtitleIndex < subtitleText.length) {
+      subtitleElement.textContent += subtitleText.charAt(subtitleIndex);
+      subtitleIndex++;
+      setTimeout(typeSubtitle, 40);
+    } else {
+      enableButtons();
+    }
+  }
+
+  function enableButtons() {
+    blockButton.disabled = false;
+    continueButton.disabled = false;
+  }
+
+  typeTitle();
+
+  function showFeedback(message, isCorrect, redirectUrl) {
+    feedbackElement.textContent = message;
+    feedbackElement.style.color = isCorrect ? 'green' : 'red';
+    setTimeout(() => {
+      window.location.href = redirectUrl;
+    }, 4000);
+  }
+
+  // "Weiter chatten" ist hier richtig
+  blockButton.addEventListener('click', () => {
+    showFeedback("Ups, das war vielleicht übervorsichtig. Du wirst zur Erklärung weitergeleitet ...", false, 'aufloesungchat2.html');
+  });
+
+  continueButton.addEventListener('click', () => {
+    showFeedback("Richtige Entscheidung! Diese Nachricht war völlig harmlos. Weiter geht's ...", true, 'erklaerungenswipen.html');
+  });
+</script>
+
+</body>
+</html>

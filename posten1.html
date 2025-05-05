@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Foto Posten – Darf man das posten?</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #f5f5f5, #e0f7fa);
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Zentriert den Inhalt horizontal */
+      height: 100vh; /* Höhe des Viewports */
+      text-align: center;
+      justify-content: flex-start; /* Hält den Inhalt oben */
+      padding-top: 20px; /* Abstand oben für den Titel */
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #00796b;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 90%; /* Containerbreite */
+      padding: 20px;
+      margin-top: 20px; /* Abstand zwischen Titel und Inhalt */
+    }
+
+    .post-img {
+      width: 70%; /* Bildgröße reduziert auf 70% */
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .author {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    .description {
+      font-size: 1rem;
+      margin: 10px 0 30px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-posten {
+      background-color: green;
+      color: white;
+    }
+
+    .btn-nichtposten {
+      background-color: red;
+      color: white;
+    }
+
+    .feedback {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .correct {
+      color: #2e7d32;
+    }
+
+    .wrong {
+      color: #c62828;
+    }
+
+    .emoji {
+      font-size: 2.5rem;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1 id="typedTitle"></h1>
+
+<div class="container">
+  <div class="author">👤 Mein Account</div>
+  <img class="post-img" src="https://live.staticflickr.com/4440/36684476706_2cb0c67b6c_b.jpg" alt="Foto Post">
+  <p class="description">Dieses Bild wurde ohne Erlaubnis aufgenommen. Darf man es posten?</p>
+
+  <div class="buttons">
+    <button class="btn btn-posten" onclick="antwort(false)">Posten</button>
+    <button class="btn btn-nichtposten" onclick="antwort(true)">Nicht posten</button>
+  </div>
+
+  <div id="feedback" class="feedback"></div>
+  <div id="emoji" class="emoji"></div>
+</div>
+
+<script>
+  function startTypingEffect(text, elementId, speed = 60, callback = null) {
+    const element = document.getElementById(elementId);
+    let index = 0;
+    function type() {
+      if (index < text.length) {
+        element.textContent += text.charAt(index);
+        index++;
+        setTimeout(type, speed);
+      } else if (callback) {
+        callback();
+      }
+    }
+    type();
+  }
+
+  function antwort(isCorrect) {
+    const feedback = document.getElementById("feedback");
+    const emoji = document.getElementById("emoji");
+
+    if (isCorrect) {
+      feedback.textContent = "✅ Gute Entscheidung! Du solltest immer die Erlaubnis des Fotografen haben. 📸";
+      feedback.className = "feedback correct";
+      emoji.textContent = "🎉👏";
+
+      // Nach 3 Sekunden zum nächsten Spiel
+      setTimeout(() => {
+        window.location.href = "posten2.html"; // Hier den Link zum nächsten Spiel anpassen
+      }, 3000);
+    } else {
+      feedback.textContent = "❌ Oh nein! Du darfst dieses Foto nicht ohne Erlaubnis posten. 😬";
+      feedback.className = "feedback wrong";
+      emoji.textContent = "📢🚫";
+
+      // Erklärung anzeigen und zurück zur gleichen Seite
+      setTimeout(() => {
+        window.location.href = "aufloesungposten1.html"; // Erklärung anzeigen
+      }, 3000);
+    }
+  }
+
+  startTypingEffect("Darf man dieses Bild posten?", "typedTitle");
+</script>
+
+</body>
+</html>
