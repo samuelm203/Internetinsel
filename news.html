@@ -15,11 +15,9 @@
 
     html, body {
       height: 100%;
-      width: 100%;
-      max-height: 100vh;
-      overflow: hidden;
       font-family: 'Poppins', sans-serif;
       background-color: #f4f4f4;
+      overflow: hidden;
     }
 
     /* Hintergrund mit sanftem Farbverlauf */
@@ -40,17 +38,15 @@
 
     /* Zentrierter Seiteninhalt */
     .content {
-      height: 100vh;
-      padding: 10px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
+      height: 100vh;
       text-align: center;
       color: #2c2c2c;
       position: relative;
       z-index: 1;
-      overflow: hidden;
     }
 
     /* Gruppe für Titel + Untertitel */
@@ -59,50 +55,56 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
     /* Titel */
     #typedTitle {
-      font-size: 1.8rem;
+      font-size: 2.5rem;
       font-weight: 700;
       color: #2c2c2c;
+      margin-top: 20px;
     }
 
     /* Untertitel */
     #typedSubtitle {
-      font-size: 1rem;
+      font-size: 1.2rem;
       color: #555;
     }
 
     /* Fake News Spiel Styles */
     .wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 50px;
+      width: 90%;
+      max-width: 1300px;
+      margin-top: 50px;
+    }
+
+    .left, .right {
       display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      margin: 0 auto;
-      width: 100%;
+      flex-direction: column;
+      gap: 50px;
     }
 
     .article {
-  width: 150px;  /* Größe der Box erhöhen */
-  height: 150px; /* Größe der Box erhöhen */
-  background-size: cover;
-  background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 15px;
-  overflow: hidden;
-  padding: 2em; /* mehr Innenabstand für besseren Textfluss */
-  cursor: pointer;
-  position: relative;
-  transition: all 0.3s linear;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
+      flex: 1;
+      height: 800px;
+      position: relative;
+      background-size: cover;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      overflow: hidden;
+      padding: 3.5em;
+      cursor: pointer;
+      transform: rotateX(0deg) rotateY(0deg);
+      transition: all 0.3s linear;
+      will-change: transform;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
 
     .overlay {
       width: 100%;
@@ -115,28 +117,30 @@
     }
 
     .article h1 {
-  font-size: 1.5rem;
-  font-family: 'Oswald', sans-serif;
-  position: relative;
-  z-index: 2;
-  color: white;
-}
-
+      font-size: 2em;
+      font-family: 'Oswald', sans-serif;
+      position: relative;
+      z-index: 2;
+      color: white;
+    }
 
     .button-container {
       display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
+      justify-content: space-between;
+      align-items: center;
+      width: 80%;
+      max-width: 900px;
+      margin: 60px auto;
+      gap: 20px;
     }
 
     .button {
       display: flex;
       justify-content: center;
       align-items: center;
-      flex: 0 0 60px;
-      padding: 8px;
-      font-size: 12px;
+      flex: 0 0 160px;
+      padding: 12px;
+      font-size: 13px;
       font-weight: 500;
       color: white;
       background-color: gray;
@@ -144,6 +148,7 @@
       border-radius: 36px;
       box-shadow: 2px 5px 10px #e4e4e4;
       cursor: pointer;
+      position: relative;
       transition: all 150ms linear;
     }
 
@@ -187,6 +192,60 @@
       border: 3px solid red;
     }
 
+    /* Media Queries für kleinere Bildschirme */
+    @media (max-width: 768px) {
+      .wrap {
+        grid-template-columns: 1fr;
+        grid-gap: 30px;
+      }
+
+      .article {
+        height: 400px;
+        padding: 2em;
+      }
+
+      .button-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .button {
+        width: 100%;
+        max-width: 200px;
+        font-size: 14px;
+        padding: 15px;
+      }
+
+      #typedTitle {
+        font-size: 2rem;
+      }
+
+      #typedSubtitle {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .article {
+        height: 300px;
+        padding: 1.5em;
+      }
+
+      .button {
+        width: 100%;
+        max-width: 180px;
+        font-size: 12px;
+        padding: 12px;
+      }
+
+      #typedTitle {
+        font-size: 1.8rem;
+      }
+
+      #typedSubtitle {
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -199,17 +258,21 @@
   </div>
 
   <div class="wrap">
-    <div class="article" id="article-1">
-      <div class="overlay"></div>
-      <h1><span>1.<br>Ab 2026 wird TikTok in ganz Europa verboten!</span></h1>
+    <div class="left">
+      <div class="article" id="article-1">
+        <div class="overlay"></div>
+        <h1><span>1.<br>Ab 2026 wird TikTok in ganz Europa verboten!</span></h1>
+      </div>
+      <div class="article" id="article-2">
+        <div class="overlay"></div>
+        <h1><span>2.<br>Sperre für Real-Star Antonio Rüdiger nach Eklat gegen Barca fix</span></h1>
+      </div>
     </div>
-    <div class="article" id="article-2">
-      <div class="overlay"></div>
-      <h1><span>2.<br>Sperre für Real-Star Antonio Rüdiger nach Eklat gegen Barca fix</span></h1>
-    </div>
-    <div class="article" id="article-3">
-      <div class="overlay"></div>
-      <h1><span>3.<br>Haie in dem Sarnersee gesichtet – Baden ab sofort verboten!</span></h1>
+    <div class="right">
+      <div class="article" id="article-3">
+        <div class="overlay"></div>
+        <h1><span>3.<br>Haie in dem Sarnersee gesichtet – Baden ab sofort verboten!</span></h1>
+      </div>
     </div>
   </div>
 
