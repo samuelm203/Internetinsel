@@ -17,7 +17,7 @@
       height: 100%;
       font-family: 'Poppins', sans-serif;
       background-color: #f4f4f4;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     /* Hintergrund mit sanftem Farbverlauf */
@@ -42,55 +42,35 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       text-align: center;
       color: #2c2c2c;
       position: relative;
       z-index: 1;
-    }
-
-    /* Gruppe für Titel + Untertitel */
-    .text-block {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 30px;
-    }
-
-    /* Titel */
-    #typedTitle {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #2c2c2c;
-      margin-top: 20px;
-    }
-
-    /* Untertitel */
-    #typedSubtitle {
-      font-size: 1.2rem;
-      color: #555;
+      padding-bottom: 50px; /* Platz für den unteren Bereich */
     }
 
     /* Fake News Spiel Styles */
     .wrap {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-gap: 50px;
-      width: 90%;
-      max-width: 1300px;
-      margin-top: 50px;
+      grid-gap: 30px; /* Weniger Abstand zwischen den Artikeln */
+      width: 80%; /* Kleinere Breite */
+      max-width: 1100px; /* Maximalbreite etwas kleiner */
+      margin-top: 30px; /* Weniger Abstand nach oben */
+      padding-bottom: 50px;
+      max-height: 100%; /* Stellt sicher, dass der Inhalt scrollbar bleibt */
     }
 
     .left, .right {
       display: flex;
       flex-direction: column;
-      gap: 50px;
+      gap: 30px; /* Weniger Abstand zwischen den Artikeln */
     }
 
     .article {
       flex: 1;
-      height: 800px;
+      height: 250px; /* Kleinere Höhe der Artikel */
       position: relative;
       background-size: cover;
       background-color: rgba(0, 0, 0, 0.6);
@@ -117,7 +97,7 @@
     }
 
     .article h1 {
-      font-size: 2em;
+      font-size: 1.6em; /* Kleinere Schriftgröße für den Artikeltext */
       font-family: 'Oswald', sans-serif;
       position: relative;
       z-index: 2;
@@ -130,7 +110,7 @@
       align-items: center;
       width: 80%;
       max-width: 900px;
-      margin: 60px auto;
+      margin: 40px auto;
     }
 
     .button {
@@ -190,79 +170,43 @@
       opacity: 0.6;
       border: 3px solid red;
     }
-  </style>  
+  </style>
+
 </head>
 <body>
 <div class="background"></div>
 
 <main class="content">
-  <div class="text-block">
-    <h1 id="typedTitle">Welche News ist echt?</h1>
-    <p id="typedSubtitle">Wähle die richtige Nachricht aus, um mehr zu erfahren!</p>
-  </div>
-
   <div class="wrap">
     <div class="left">
       <div class="article" id="article-1">
         <div class="overlay"></div>
-        <h1><span>1.<br>Taylor Swift ist schwanger</span></h1>
+        <h1><span>1.<br>Ab 2026 wird TikTok in ganz Europa verboten!</span></h1>
       </div>
       <div class="article" id="article-2">
         <div class="overlay"></div>
-        <h1><span>2.<br>Die Schule Sarnen hat gebrannt</span></h1>
+        <h1><span>2.<br>Sperre für Real-Star Antonio Rüdiger nach Eklat gegen Barca fix</span></h1>
       </div>
     </div>
     <div class="right">
       <div class="article" id="article-3">
         <div class="overlay"></div>
-        <h1><span>3.<br>Nidwalden beschliesst Richtlinien für Handynutzung an Schulen</span></h1>
+        <h1><span>3.<br>Haie in dem Sarnersee gesichtet – Baden ab sofort verboten!</span></h1>
       </div>
     </div>
   </div>
 
   <div class="button-container">
-    <button class="button" onclick="waehleAntwort(1)">1</button>
-    <button class="button" onclick="waehleAntwort(2)">2</button>
-    <button class="button" onclick="waehleAntwort(3)">3</button>
+    <button class="button" onclick="wähleAntwort(1)">1</button>
+    <button class="button" onclick="wähleAntwort(2)">2</button>
+    <button class="button" onclick="wähleAntwort(3)">3</button>
   </div>
 </main>
 
 <script>
-  console.log("JS geladen");
+  const echteNachricht = 2;
 
-  const titleText = "Welche News ist echt?";
-  const subtitleText = "Wähle die richtige Nachricht aus, um mehr zu erfahren!";
-
-  const titleElement = document.getElementById("typedTitle");
-  const subtitleElement = document.getElementById("typedSubtitle");
-
-  let titleIndex = 0;
-  let subtitleIndex = 0;
-
-  function typeTitle() {
-    if (titleIndex < titleText.length) {
-      titleElement.textContent += titleText.charAt(titleIndex);
-      titleIndex++;
-      setTimeout(typeTitle, 70);
-    } else {
-      setTimeout(typeSubtitle, 500);
-    }
-  }
-
-  function typeSubtitle() {
-    if (subtitleIndex < subtitleText.length) {
-      subtitleElement.textContent += subtitleText.charAt(subtitleIndex);
-      subtitleIndex++;
-      setTimeout(typeSubtitle, 40);
-    }
-  }
-
-  // Wenn du lieber mit getipptem Text startest, kommentiere die nächste Zeile NICHT aus
-  // typeTitle();
-
-  const echteNachricht = 3;
-
-  function waehleAntwort(gewählt) {
+  function wähleAntwort(gewählt) {
     const buttons = document.querySelectorAll('.button');
     const articles = document.querySelectorAll('.article');
 
@@ -278,14 +222,11 @@
     if (gewählt !== echteNachricht) {
       gewählterButton.classList.add("incorrect");
       articles[gewählt - 1].classList.add("false");
-      setTimeout(() => {
-        window.location.href = "aufloesungfakenews2.html";
-      }, 2000);
-    } else {
-      setTimeout(() => {
-        window.location.href = "ende.html";
-      }, 2000);
     }
+
+    setTimeout(() => {
+      gewählterButton.classList.remove("clicked");
+    }, 150);
 
     setTimeout(() => {
       buttons.forEach(btn => {
@@ -293,6 +234,10 @@
         btn.style.cursor = "not-allowed";
       });
     }, 150);
+
+    setTimeout(() => {
+      window.location.href = "aufloesungfakenews.html";
+    }, 2000);
   }
 </script>
 
