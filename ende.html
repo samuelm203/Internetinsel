@@ -6,7 +6,6 @@
   <title>Spiel Abschluss</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    /* Basis-Reset */
     * {
       margin: 0;
       padding: 0;
@@ -20,7 +19,6 @@
       overflow: hidden;
     }
 
-    /* Hintergrund mit sanftem Farbverlauf */
     .background {
       background: linear-gradient(135deg, #e0e0e0, #ffffff);
       background-size: 400% 400%;
@@ -36,7 +34,6 @@
       50% { background-position: 100% 50%; }
     }
 
-    /* Zentrierter Seiteninhalt */
     .content {
       display: flex;
       flex-direction: column;
@@ -49,7 +46,6 @@
       z-index: 1;
     }
 
-    /* Gruppe für Titel + Untertitel */
     .text-block {
       display: flex;
       flex-direction: column;
@@ -58,31 +54,34 @@
       margin-bottom: 30px;
     }
 
-    /* Titel */
     #typedTitle {
       font-size: 2.5rem;
       font-weight: 700;
       color: #2c2c2c;
     }
 
-    /* Untertitel */
     #typedSubtitle {
       font-size: 1.2rem;
       color: #555;
     }
 
-    /* Abschlussnachricht */
     #endMessage {
       font-size: 1.5rem;
       font-weight: 700;
       color: #333;
       margin-top: 20px;
       opacity: 0;
-      animation: fadeIn 2s forwards;
+      animation: fadeIn 2s forwards, shake 1s ease infinite;
     }
 
-    /* Der Button */
-    #endButton {
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .endButton {
       padding: 14px 28px;
       font-size: 1.1rem;
       font-weight: 500;
@@ -97,36 +96,29 @@
       animation: fadeIn 2s 2s forwards, pulse 2s infinite;
     }
 
-    #endButton:hover {
+    .endButton:hover {
       background-color: rgba(86, 0, 255, 0.71);
       transform: scale(1.1);
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
     }
 
-    /* Fade-In Animation */
     @keyframes fadeIn {
       0% { opacity: 0; }
       100% { opacity: 1; }
     }
 
-    /* Pulsierender Effekt */
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
 
-    /* Wackel-Effekt für den Abschlusstext */
     @keyframes shake {
       0% { transform: translateX(0); }
       25% { transform: translateX(-10px); }
       50% { transform: translateX(10px); }
       75% { transform: translateX(-10px); }
       100% { transform: translateX(0); }
-    }
-
-    #endMessage {
-      animation: shake 1s ease infinite;
     }
   </style>
 </head>
@@ -138,8 +130,12 @@
     <h1 id="typedTitle"></h1>
     <p id="typedSubtitle"></p>
   </div>
-  <div id="endMessage">Du hast das Spiel erfolgreich abgeschlossen!</div>
-  <button id="endButton" onclick="window.location.href='https://forms.office.com/Pages/ResponsePage.aspx?id=V9Rr51DPPkia2baZhD9Ogp-4ERHjShVAjezFqd0u07VUNktUVURMTVA4RVRVRlBSNzFNMFVIMFpXSi4u'">Zur Umfrage!</button>
+ 
+
+  <div class="button-group">
+    <button class="endButton" onclick="window.location.href='https://forms.office.com/Pages/ResponsePage.aspx?id=V9Rr51DPPkia2baZhD9Ogp-4ERHjShVAjezFqd0u07VUNktUVURMTVA4RVRVRlBSNzFNMFVIMFpXSi4u'">Zur Umfrage!</button>
+    <button class="endButton" onclick="window.location.href='zusatz.html'">Zusatz-Quiz</button>
+  </div>
 </main>
 
 <script>
@@ -157,7 +153,7 @@
       titleIndex++;
       setTimeout(typeTitle, 70);
     } else {
-      setTimeout(typeSubtitle, 500); // kurze Pause
+      setTimeout(typeSubtitle, 500);
     }
   }
 
