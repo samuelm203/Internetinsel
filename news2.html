@@ -47,56 +47,34 @@
       color: #2c2c2c;
       position: relative;
       z-index: 1;
-    }
-
-    /* Gruppe für Titel + Untertitel */
-    .text-block {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 30px;
-    }
-
-    /* Titel */
-    #typedTitle {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #2c2c2c;
-      margin-top: 20px;
-    }
-
-    /* Untertitel */
-    #typedSubtitle {
-      font-size: 1.2rem;
-      color: #555;
+      gap: 30px; /* Weniger Abstand zwischen den Elementen */
     }
 
     /* Fake News Spiel Styles */
     .wrap {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-gap: 50px;
+      grid-gap: 20px; /* Weniger Abstand zwischen den Artikeln */
       width: 90%;
       max-width: 1300px;
-      margin-top: 50px;
+      margin-top: 0; /* Kein Abstand nach oben */
     }
 
     .left, .right {
       display: flex;
       flex-direction: column;
-      gap: 50px;
+      gap: 20px; /* Weniger Abstand zwischen den Artikeln */
     }
 
     .article {
       flex: 1;
-      height: 800px;
+      height: 600px; /* Kleinere Höhe der Artikel */
       position: relative;
       background-size: cover;
       background-color: rgba(0, 0, 0, 0.6);
       border-radius: 15px;
       overflow: hidden;
-      padding: 3.5em;
+      padding: 2.5em;
       cursor: pointer;
       transform: rotateX(0deg) rotateY(0deg);
       transition: all 0.3s linear;
@@ -117,7 +95,7 @@
     }
 
     .article h1 {
-      font-size: 2em;
+      font-size: 1.5em; /* Kleinere Schriftgröße */
       font-family: 'Oswald', sans-serif;
       position: relative;
       z-index: 2;
@@ -128,18 +106,18 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 80%;
-      max-width: 900px;
-      margin: 60px auto;
+      width: 70%;
+      max-width: 700px;
+      margin: 30px auto;
     }
 
     .button {
       display: flex;
       justify-content: center;
       align-items: center;
-      flex: 0 0 160px;
+      flex: 0 0 140px;
       padding: 12px;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 500;
       color: white;
       background-color: gray;
@@ -196,11 +174,6 @@
 <div class="background"></div>
 
 <main class="content">
-  <div class="text-block">
-    <h1 id="typedTitle"></h1>
-    <p id="typedSubtitle"></p>
-  </div>
-
   <div class="wrap">
     <div class="left">
       <div class="article" id="article-1">
@@ -221,45 +194,16 @@
   </div>
 
   <div class="button-container">
-    <button class="button" onclick="wähleAntwort(1)">1</button>
-    <button class="button" onclick="wähleAntwort(2)">2</button>
-    <button class="button" onclick="wähleAntwort(3)">3</button>
+    <button class="button" onclick="waehleAntwort(1)">1</button>
+    <button class="button" onclick="waehleAntwort(2)">2</button>
+    <button class="button" onclick="waehleAntwort(3)">3</button>
   </div>
 </main>
 
 <script>
-  const titleText = "Welche News ist echt?";
-  const subtitleText = "Wähle die richtige Nachricht aus, um mehr zu erfahren!";
-
-  const titleElement = document.getElementById("typedTitle");
-  const subtitleElement = document.getElementById("typedSubtitle");
-
-  let titleIndex = 0;
-  let subtitleIndex = 0;
-
-  function typeTitle() {
-    if (titleIndex < titleText.length) {
-      titleElement.textContent += titleText.charAt(titleIndex);
-      titleIndex++;
-      setTimeout(typeTitle, 70);
-    } else {
-      setTimeout(typeSubtitle, 500);
-    }
-  }
-
-  function typeSubtitle() {
-    if (subtitleIndex < subtitleText.length) {
-      subtitleElement.textContent += subtitleText.charAt(subtitleIndex);
-      subtitleIndex++;
-      setTimeout(typeSubtitle, 40);
-    }
-  }
-
-  typeTitle();
-
   const echteNachricht = 3;
 
-  function wähleAntwort(gewählt) {
+  function waehleAntwort(gewählt) {
     const buttons = document.querySelectorAll('.button');
     const articles = document.querySelectorAll('.article');
 
@@ -276,11 +220,11 @@
       gewählterButton.classList.add("incorrect");
       articles[gewählt - 1].classList.add("false");
       setTimeout(() => {
-        window.location.href = "aufloesungfakenews2.html"; // Weiterleitung bei falscher Antwort
+        window.location.href = "aufloesungfakenews2.html";
       }, 2000);
     } else {
       setTimeout(() => {
-        window.location.href = "ende.html"; // Weiterleitung bei richtiger Antwort
+        window.location.href = "ende.html";
       }, 2000);
     }
 
