@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Quiz: Soziale Medien</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .background {
+            background: linear-gradient(135deg, #e0e0e0, #ffffff);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 10px;
+            text-align: center;
+        }
+
+        #typedTitle {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c2c2c;
+            margin-bottom: 15px;
+            min-height: 2.5rem;
+        }
+
+        .question {
+            font-size: 1.05rem;
+            margin: 16px 0;
+        }
+
+        .options button {
+            display: block;
+            width: 280px;
+            margin: 8px auto;
+            padding: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            background-color: #7E007B;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .options button:hover:enabled {
+            background-color: rgba(86, 0, 255, 0.71);
+            transform: scale(1.02);
+        }
+
+        .feedback {
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin-top: 16px;
+        }
+
+        #nextBtn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            background-color: #7E007B;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 200px;
+        }
+
+        #nextBtn:disabled {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<div class="background"></div>
+<div class="container">
+    <h1 id="typedTitle"></h1>
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    const titleText = "Quiz: Soziale Medien – Was weißt du?";
+    const titleElement = document.getElementById("typedTitle");
+    let titleIndex = 0;
+
+    function typeTitle() {
+        if (titleIndex < titleText.length) {
+            titleElement.textContent += titleText.charAt(titleIndex);
+            titleIndex++;
+            setTimeout(typeTitle, 60);
+        } else {
+            showQuestion();
+        }
+    }
+
+    const questions = [
+        {
+            question: "Was solltest du vermeiden, in sozialen Medien zu posten?",
+            options: ["Landschaftsbilder", "Private Adressen", "Urlaubsfotos"],
+            correct: 1,
+            explanation: "Private Adressen sollten nie öffentlich geteilt werden."
+        },
+        {
+            question: "Was bedeutet ein 'privates Profil'?",
+            options: ["Nur Freunde sehen deine Inhalte", "Jeder kann dein Profil sehen", "Nur du kannst dein Profil sehen"],
+            correct: 0,
+            explanation: "Nur akzeptierte Freunde sehen deine Inhalte."
+        },
+        {
+            question: "Was solltest du tun, wenn dich jemand online belästigt?",
+            options: ["Ignorieren", "Zurückbeleidigen", "Blockieren und melden"],
+            correct: 2,
+            explanation: "Blockieren und Melden ist der richtige Schritt."
+        },
+        {
+            question: "Was ist ein sicheres Passwort?",
+            options: ["123456", "MeinGeburtsdatum", "X!a9#B2d@f3"],
+            correct: 2,
+            explanation: "Ein sicheres Passwort ist lang und enthält Sonderzeichen."
+        },
+        {
+            question: "Warum ist es gefährlich, Standortdaten zu posten?",
+            options: ["Weil es langweilig ist", "Weil andere wissen, wo du bist", "Weil es Speicherplatz kostet"],
+            correct: 1,
+            explanation: "Andere könnten wissen, ob du z.B. nicht zu Hause bist."
+        },
+        {
+            question: "Wie erkennt man Fake News am besten?",
+            options: ["An der Anzahl Likes", "An der Quelle und Faktenprüfung", "An der Länge des Texts"],
+            correct: 1,
+            explanation: "Seriöse Quellen und Faktenchecks sind entscheidend."
+        },
+        {
+            question: "Was ist ein Influencer?",
+            options: ["Jemand mit vielen Followern", "Ein Computerprogramm", "Ein Hacker"],
+            correct: 0,
+            explanation: "Influencer beeinflussen mit ihren Inhalten andere."
+        },
+        {
+            question: "Was solltest du tun, bevor du ein Foto von jemandem postest?",
+            options: ["Gar nichts", "Fragen, ob es okay ist", "Einfach posten"],
+            correct: 1,
+            explanation: "Fragen zeigt Respekt vor der Privatsphäre."
+        },
+        {
+            question: "Was ist Cybermobbing?",
+            options: ["Mobbing am Arbeitsplatz", "Mobbing über das Internet", "Mobbing auf dem Schulhof"],
+            correct: 1,
+            explanation: "Cybermobbing passiert online, z.B. in sozialen Medien."
+        },
+        {
+            question: "Was kannst du tun, um deine Daten zu schützen?",
+            options: ["Alles posten", "Passwort teilen", "Privatsphäre-Einstellungen nutzen"],
+            correct: 2,
+            explanation: "Nutze die Einstellungen, um deine Daten zu schützen."
+        }
+    ];
+
+    let currentQuestion = 0;
+
+    function showQuestion() {
+        const q = questions[currentQuestion];
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = `
+        <div class="question"><strong>Frage ${currentQuestion + 1}:</strong> ${q.question}</div>
+        <div class="options">
+          ${q.options.map((opt, i) => `<button onclick="checkAnswer(${i})">${opt}</button>`).join('')}
+        </div>
+        <div id="feedback" class="feedback"></div>
+      `;
+    }
+
+    function checkAnswer(selected) {
+        const q = questions[currentQuestion];
+        const feedback = document.getElementById('feedback');
+        if (selected === q.correct) {
+            feedback.innerHTML = "✅ Richtig!";
+        } else {
+            feedback.innerHTML = `❌ Falsch. ${q.explanation}`;
+        }
+
+        document.querySelectorAll('.options button').forEach(btn => btn.disabled = true);
+
+        // Countdown-Button
+        let countdown = 5;
+        const nextBtn = document.createElement("button");
+        nextBtn.id = "nextBtn";
+        nextBtn.disabled = true;
+        nextBtn.textContent = `Nächste Frage in ${countdown}…`;
+        feedback.appendChild(document.createElement("br"));
+        feedback.appendChild(nextBtn);
+
+        const interval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                nextBtn.textContent = `Nächste Frage in ${countdown}…`;
+            } else {
+                clearInterval(interval);
+                nextBtn.textContent = "Nächste Frage";
+                nextBtn.disabled = false;
+                nextBtn.addEventListener("click", nextQuestion);
+            }
+        }, 1000);
+    }
+
+    function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            showQuestion();
+        } else {
+            document.getElementById('quiz-container').innerHTML = `
+          <h2>🎉 Du hast das Quiz abgeschlossen!</h2>
+          <p>Super gemacht! Du hast einiges über soziale Medien gelernt.</p>
+        `;
+        }
+    }
+    function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            showQuestion();
+        } else {
+            // Weiterleitung zur Abschlussseite
+            window.location.href = "ende.html";
+        }
+    }
+
+    typeTitle();
+</script>
+</body>
+</html>
