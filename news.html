@@ -1,302 +1,166 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fake News Spiel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
-  <style>
-    /* Basis-Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      font-family: 'Poppins', sans-serif;
-      background-color: #f4f4f4;
-      overflow-x: hidden;
-    }
-
-    /* Hintergrund mit sanftem Farbverlauf */
-    .background {
-      background: linear-gradient(135deg, #e0e0e0, #ffffff);
-      background-size: 400% 400%;
-      animation: gradient 15s ease infinite;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-
-    @keyframes gradient {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-
-    /* Zentrierter Seiteninhalt */
-    .content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      text-align: center;
-      color: #2c2c2c;
-      position: relative;
-      z-index: 1;
-      padding-bottom: 50px; /* Platz für den unteren Bereich */
-    }
-
-    /* Gruppe für Titel + Untertitel */
-    .text-block {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 30px;
-    }
-
-    /* Titel */
-    #typedTitle {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #2c2c2c;
-      margin-top: 20px;
-    }
-
-    /* Untertitel */
-    #typedSubtitle {
-      font-size: 1.2rem;
-      color: #555;
-    }
-
-    /* Fake News Spiel Styles */
-    .wrap {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-gap: 50px;
-      width: 90%;
-      max-width: 1300px;
-      margin-top: 50px;
-      overflow-y: auto;
-      padding-bottom: 50px;
-      max-height: 100%; /* Stellt sicher, dass der Inhalt scrollbar bleibt */
-    }
-
-    .left, .right {
-      display: flex;
-      flex-direction: column;
-      gap: 50px;
-    }
-
-    .article {
-      flex: 1;
-      height: 300px; /* Fixed height for each article */
-      position: relative;
-      background-size: cover;
-      background-color: rgba(0, 0, 0, 0.6);
-      border-radius: 15px;
-      overflow: hidden;
-      padding: 3.5em;
-      cursor: pointer;
-      transform: rotateX(0deg) rotateY(0deg);
-      transition: all 0.3s linear;
-      will-change: transform;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-    }
-
-    .overlay {
-      width: 100%;
-      height: 100%;
-      background-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.3) 20%, rgba(0, 0, 0, 0.4) 50%);
-      position: absolute;
-      left: 0;
-      top: 0;
-      z-index: 1;
-    }
-
-    .article h1 {
-      font-size: 2em;
-      font-family: 'Oswald', sans-serif;
-      position: relative;
-      z-index: 2;
-      color: white;
-    }
-
-    .button-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 80%;
-      max-width: 900px;
-      margin: 60px auto;
-    }
-
-    .button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex: 0 0 160px;
-      padding: 12px;
-      font-size: 13px;
-      font-weight: 500;
-      color: white;
-      background-color: gray;
-      border: none;
-      border-radius: 36px;
-      box-shadow: 2px 5px 10px #e4e4e4;
-      cursor: pointer;
-      position: relative;
-      transition: all 150ms linear;
-    }
-
-    .button:hover {
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6);
-      background-color: #444;
-    }
-
-    .button:active {
-      opacity: 0.75;
-    }
-
-    .button:focus {
-      outline: 1px dotted #959595;
-      outline-offset: -4px;
-    }
-
-    .correct {
-      background-color: limegreen !important;
-      box-shadow: 0 0 20px limegreen;
-    }
-
-    .incorrect {
-      background-color: red !important;
-      box-shadow: 0 0 20px red;
-    }
-
-    .clicked {
-      transform: scale(1.2);
-      transition: transform 0.1s ease;
-    }
-
-    .article.true {
-      border: 5px solid limegreen;
-      box-shadow: 0 0 20px limegreen;
-    }
-
-    .article.false {
-      filter: grayscale(100%) blur(1px);
-      opacity: 0.6;
-      border: 3px solid red;
-    }
-  </style>
-</head>
-<body>
-<div class="background"></div>
-
-<main class="content">
-  <div class="text-block">
-    <h1 id="typedTitle"></h1>
-    <p id="typedSubtitle"></p>
-  </div>
-
-  <div class="wrap">
-    <div class="left">
-      <div class="article" id="article-1">
-        <div class="overlay"></div>
-        <h1><span>1.<br>Ab 2026 wird TikTok in ganz Europa verboten!</span></h1>
-      </div>
-      <div class="article" id="article-2">
-        <div class="overlay"></div>
-        <h1><span>2.<br>Sperre für Real-Star Antonio Rüdiger nach Eklat gegen Barca fix</span></h1>
-      </div>
-    </div>
-    <div class="right">
-      <div class="article" id="article-3">
-        <div class="overlay"></div>
-        <h1><span>3.<br>Haie in dem Sarnersee gesichtet – Baden ab sofort verboten!</span></h1>
-      </div>
-    </div>
-  </div>
-
-  <div class="button-container">
-    <button class="button" onclick="wähleAntwort(1)">1</button>
-    <button class="button" onclick="wähleAntwort(2)">2</button>
-    <button class="button" onclick="wähleAntwort(3)">3</button>
-  </div>
-</main>
-
-<script>
-  const titleText = "Welche News ist echt?";
-  const subtitleText = "Wähle die richtige Nachricht aus, um mehr zu erfahren!";
-
-  const titleElement = document.getElementById("typedTitle");
-  const subtitleElement = document.getElementById("typedSubtitle");
-
-  let titleIndex = 0;
-  let subtitleIndex = 0;
-
-  function typeTitle() {
-    if (titleIndex < titleText.length) {
-      titleElement.textContent += titleText.charAt(titleIndex);
-      titleIndex++;
-      setTimeout(typeTitle, 70);
-    } else {
-      setTimeout(typeSubtitle, 500);
-    }
+<style>
+  /* Basis-Reset */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
 
-  function typeSubtitle() {
-    if (subtitleIndex < subtitleText.length) {
-      subtitleElement.textContent += subtitleText.charAt(subtitleIndex);
-      subtitleIndex++;
-      setTimeout(typeSubtitle, 40);
-    }
+  html, body {
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    overflow-x: hidden;
   }
 
-  typeTitle();
-
-  const echteNachricht = 2;
-
-  function wähleAntwort(gewählt) {
-    const buttons = document.querySelectorAll('.button');
-    const articles = document.querySelectorAll('.article');
-
-    buttons.forEach(btn => btn.classList.remove("correct", "incorrect", "clicked"));
-    articles.forEach(article => article.classList.remove("true", "false"));
-
-    const gewählterButton = buttons[gewählt - 1];
-    gewählterButton.classList.add("clicked");
-
-    articles[echteNachricht - 1].classList.add("true");
-    buttons[echteNachricht - 1].classList.add("correct");
-
-    if (gewählt !== echteNachricht) {
-      gewählterButton.classList.add("incorrect");
-      articles[gewählt - 1].classList.add("false");
-    }
-
-    setTimeout(() => {
-      gewählterButton.classList.remove("clicked");
-    }, 150);
-
-    setTimeout(() => {
-      buttons.forEach(btn => {
-        btn.disabled = true;
-        btn.style.cursor = "not-allowed";
-      });
-    }, 150);
-
-    setTimeout(() => {
-      window.location.href = "aufloesungfakenews.html";
-    }, 2000);
+  /* Hintergrund mit sanftem Farbverlauf */
+  .background {
+    background: linear-gradient(135deg, #e0e0e0, #ffffff);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
   }
-</script>
 
-</body>
-</html>
+  @keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Zentrierter Seiteninhalt */
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    text-align: center;
+    color: #2c2c2c;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 50px; /* Platz für den unteren Bereich */
+  }
+
+  /* Fake News Spiel Styles */
+  .wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 30px; /* Weniger Abstand zwischen den Artikeln */
+    width: 80%; /* Kleinere Breite */
+    max-width: 1100px; /* Maximalbreite etwas kleiner */
+    margin-top: 30px; /* Weniger Abstand nach oben */
+    padding-bottom: 50px;
+    max-height: 100%; /* Stellt sicher, dass der Inhalt scrollbar bleibt */
+  }
+
+  .left, .right {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Weniger Abstand zwischen den Artikeln */
+  }
+
+  .article {
+    flex: 1;
+    height: 250px; /* Kleinere Höhe der Artikel */
+    position: relative;
+    background-size: cover;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 15px;
+    overflow: hidden;
+    padding: 3.5em;
+    cursor: pointer;
+    transform: rotateX(0deg) rotateY(0deg);
+    transition: all 0.3s linear;
+    will-change: transform;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .overlay {
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.3) 20%, rgba(0, 0, 0, 0.4) 50%);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+  }
+
+  .article h1 {
+    font-size: 1.6em; /* Kleinere Schriftgröße für den Artikeltext */
+    font-family: 'Oswald', sans-serif;
+    position: relative;
+    z-index: 2;
+    color: white;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    max-width: 900px;
+    margin: 40px auto;
+  }
+
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0 0 160px;
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: white;
+    background-color: gray;
+    border: none;
+    border-radius: 36px;
+    box-shadow: 2px 5px 10px #e4e4e4;
+    cursor: pointer;
+    position: relative;
+    transition: all 150ms linear;
+  }
+
+  .button:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6);
+    background-color: #444;
+  }
+
+  .button:active {
+    opacity: 0.75;
+  }
+
+  .button:focus {
+    outline: 1px dotted #959595;
+    outline-offset: -4px;
+  }
+
+  .correct {
+    background-color: limegreen !important;
+    box-shadow: 0 0 20px limegreen;
+  }
+
+  .incorrect {
+    background-color: red !important;
+    box-shadow: 0 0 20px red;
+  }
+
+  .clicked {
+    transform: scale(1.2);
+    transition: transform 0.1s ease;
+  }
+
+  .article.true {
+    border: 5px solid limegreen;
+    box-shadow: 0 0 20px limegreen;
+  }
+
+  .article.false {
+    filter: grayscale(100%) blur(1px);
+    opacity: 0.6;
+    border: 3px solid red;
+  }
+</style>
