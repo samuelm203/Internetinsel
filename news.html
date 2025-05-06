@@ -17,7 +17,7 @@
       height: 100%;
       font-family: 'Poppins', sans-serif;
       background-color: #f4f4f4;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     /* Hintergrund mit sanftem Farbverlauf */
@@ -42,11 +42,12 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       text-align: center;
       color: #2c2c2c;
       position: relative;
       z-index: 1;
+      padding-bottom: 50px; /* Platz für den unteren Bereich */
     }
 
     /* Gruppe für Titel + Untertitel */
@@ -80,6 +81,9 @@
       width: 90%;
       max-width: 1300px;
       margin-top: 50px;
+      overflow-y: auto;
+      padding-bottom: 50px;
+      max-height: 100%; /* Stellt sicher, dass der Inhalt scrollbar bleibt */
     }
 
     .left, .right {
@@ -90,7 +94,7 @@
 
     .article {
       flex: 1;
-      height: 800px;
+      height: 300px; /* Fixed height for each article */
       position: relative;
       background-size: cover;
       background-color: rgba(0, 0, 0, 0.6);
@@ -131,7 +135,6 @@
       width: 80%;
       max-width: 900px;
       margin: 60px auto;
-      gap: 20px;
     }
 
     .button {
@@ -190,61 +193,6 @@
       filter: grayscale(100%) blur(1px);
       opacity: 0.6;
       border: 3px solid red;
-    }
-
-    /* Media Queries für kleinere Bildschirme */
-    @media (max-width: 768px) {
-      .wrap {
-        grid-template-columns: 1fr;
-        grid-gap: 30px;
-      }
-
-      .article {
-        height: 400px;
-        padding: 2em;
-      }
-
-      .button-container {
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .button {
-        width: 100%;
-        max-width: 200px;
-        font-size: 14px;
-        padding: 15px;
-      }
-
-      #typedTitle {
-        font-size: 2rem;
-      }
-
-      #typedSubtitle {
-        font-size: 1rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .article {
-        height: 300px;
-        padding: 1.5em;
-      }
-
-      .button {
-        width: 100%;
-        max-width: 180px;
-        font-size: 12px;
-        padding: 12px;
-      }
-
-      #typedTitle {
-        font-size: 1.8rem;
-      }
-
-      #typedSubtitle {
-        font-size: 0.9rem;
-      }
     }
   </style>
 </head>
